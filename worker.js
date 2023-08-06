@@ -1,21 +1,42 @@
 // worker.js - Child Process (Worker)
 
+const _isPrime = require('./isPrime')
+
+
 // Function to simulate some work
-function doWork() {
+function doWork(limit) {
   console.log('Processing some work...');
-  // Simulate work by waiting for a random time
-  const randomTime = Math.floor(Math.random() * 3000) + 1000;
-  return new Promise((resolve) => setTimeout(resolve, randomTime));
+
+  let a;
+  for (let i = 0; i < limit; i++) {
+    a = _isPrime(i)
+  }
+
+  return Promise.resolve()
 }
 
 // Receive messages from the parent process
 process.on('message', async (message) => {
-  if (message === 'start') {
-    console.log(`Worker ${process.pid} started to work.`);
-    await doWork();
-    // Send a message to the parent process to indicate completion
-    process.send('finished');
-    console.log(`Worker ${process.pid} finished the work.`);
-    process.exit();
-  }
+
+    if (!message || typeof message != "string") {
+        return
+    }
+
+    try {
+        message = JSON.parse(message)
+    } catch(e) {
+        console.error(e)
+        return 
+    }
+
+    if (message.start === true && typeof message.limit == "number") {
+        console.log(`Worker ${process.pid} started to work.`);
+        await doWork(message.limit);
+        // Send a message to the parent process to indicate completion
+        process.send('finished');
+        console.log(`Worker ${process.pid} finished the work.`);
+        process.exit();
+    }
 });
+
+
