@@ -18,15 +18,8 @@ function doWork(limit) {
 // Receive messages from the parent process
 process.on('message', async (message) => {
 
-    if (!message || typeof message != "string") {
+    if (!message || typeof message != "object") {
         return
-    }
-
-    try {
-        message = JSON.parse(message)
-    } catch(e) {
-        console.error(e)
-        return 
     }
 
     if (message.start === true && typeof message.limit == "number") {

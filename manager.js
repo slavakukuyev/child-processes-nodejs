@@ -11,7 +11,7 @@ function main() {
     const workers = [];
     let numWorkersFinished = 0;
 
-    const limit = 99999;
+    const limit = 9999999;
     let running = true
 
     let startTime = Date.now()
@@ -33,7 +33,8 @@ function main() {
         });
 
         // Start the worker
-        worker.send(`{"start":true, "limit": ${limit}}`);
+        // Sending an object directly instead of a string will improve performance and reduce the risk of errors when parsing the message on the worker side.
+        worker.send({"start":true, "limit": limit});
         console.log(`Worker ${worker.pid} started.`);
     }
 
@@ -42,7 +43,7 @@ function main() {
 
     function sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
-    }
+                }
 
     async function run(callback) {
         while (running) {
@@ -73,7 +74,7 @@ function main() {
                 console.error(err)
                 return
             }
-    
+
             console.log('Single worker has finished its work in parallel in ', (Date.now() - startTime) / 1000, ' sec');
     
         })
