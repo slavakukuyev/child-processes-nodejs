@@ -1,3 +1,15 @@
-// Please use this function responsibly and avoid running it for extended periods or in production environments. 
-// It is essential to consider the potential impact on system performance before running resource-intensive functions.
-module.exports =  num => Array.from({ length: Math.sqrt(num) - 1 }, (_, i) => i + 2).every(n => num % n !== 0);
+const isPrime = (num) => {
+    if (num <= 1) {
+        return false;
+    }
+
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+module.exports = isPrime;

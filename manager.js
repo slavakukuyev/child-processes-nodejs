@@ -11,7 +11,7 @@ function main() {
     const workers = [];
     let numWorkersFinished = 0;
 
-    const limit = 99999;
+    const limit = 9999999;
     let running = true
 
     let startTime = Date.now()
